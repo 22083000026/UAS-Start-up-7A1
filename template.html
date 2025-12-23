@@ -1,0 +1,622 @@
+<?php
+// template.php
+ob_start();
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockminer - <?php echo isset($page_title) ? $page_title : 'Platform Mining'; ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- CSS Tambahan untuk Halaman Pembayaran -->
+    <?php if(isset($page_name) && $page_name == 'pembayaran'): ?>
+    <style>
+        /* Additional styles specific to pembayaran.php */
+        /* Hero Section */
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(69, 6, 147, 0.05), rgba(140, 0, 255, 0.05));
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--gray-text);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .section-title p {
+            color: var(--gray-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .pricing-cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            flex: 1;
+            min-width: 300px;
+            max-width: 350px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .pricing-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .card-popular {
+            border: 2px solid var(--highlight);
+        }
+
+        .card-popular::after {
+            content: "POPULAR";
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--highlight);
+            color: var(--primary);
+            padding: 5px 30px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .card-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card-period {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .card-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-features li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .card-cta {
+            text-align: center;
+        }
+
+        .btn-pricing {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-pricing-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-pricing-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(69, 6, 147, 0.3);
+        }
+
+        .btn-pricing-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-pricing-secondary:hover {
+            background: rgba(69, 6, 147, 0.1);
+        }
+
+        .btn-pricing-accent {
+            background: var(--highlight);
+            color: var(--primary);
+        }
+
+        .btn-pricing-accent:hover {
+            background: #ffb300;
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, rgba(69, 6, 147, 0.03), rgba(255, 63, 127, 0.03));
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 3px solid;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .feature-icon-1 {
+            border-color: var(--primary);
+        }
+
+        .feature-icon-2 {
+            border-color: var(--secondary);
+        }
+
+        .feature-icon-3 {
+            border-color: var(--accent);
+        }
+
+        .feature-icon-4 {
+            border-color: var(--highlight);
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: #f5f5f5;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: white;
+        }
+
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .faq-toggle {
+            transition: var(--transition);
+        }
+
+        .faq-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+    <?php endif; ?>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="index.php" class="logo">
+                <div class="logo-icon">
+                    <img src="https://ik.imagekit.io/tqu6gzwh8/File%20Image/CoinKu-img.png?updatedAt=1761394533363" alt="Blockminer Logo">
+                </div>
+                <div class="logo-text">Blockminer</div>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="index.php#home" data-nav="home">Beranda</a></li>
+                    <li><a href="index.php#features" data-nav="features">Fitur</a></li>
+                    <li><a href="index.php#coin" data-nav="coin">CoinKu</a></li>
+                    <li><a href="pembayaran.php" data-nav="paket">Paket Pro</a></li>
+                    <li><a href="index.php#download" data-nav="download">Unduh</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close" id="sidebarClose">&times;</button>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="index.php#home" data-nav="home">Beranda</a></li>
+                <li><a href="index.php#features" data-nav="features">Fitur</a></li>
+                <li><a href="index.php#coin" data-nav="coin">CoinKu</a></li>
+                <li><a href="pembayaran.php" data-nav="paket">Paket Pro</a></li>
+                <li><a href="index.php#download" data-nav="download">Unduh</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <?php 
+        // Menampilkan konten yang di-set dari halaman
+        if(isset($content)) {
+            echo $content;
+        } else {
+            // Default content jika tidak ada konten
+            echo '<div class="container" style="padding: 100px 0; text-align: center;">
+                    <h2>Selamat Datang di Blockminer</h2>
+                    <p>Halaman tidak ditemukan atau belum memiliki konten.</p>
+                  </div>';
+        }
+        ?>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Blockminer</h3>
+                    <p style="color: #aaa; margin-bottom: 1.5rem;">Platform mining terdepan dengan cryptocurrency eksklusif CoinKu.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Tautan Cepat</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.php#home">Beranda</a></li>
+                        <li><a href="index.php#features">Fitur</a></li>
+                        <li><a href="index.php#coin">CoinKu</a></li>
+                        <li><a href="pembayaran.php">Paket Pro</a></li>
+                        <li><a href="index.php#download">Unduh</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Dukungan</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Pusat Bantuan</a></li>
+                        <li><a href="#">Kontak</a></li>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Kontak</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:22083000026@student.unmer.ac.id">22083000026@student.unmer.ac.id</a></li>
+                        <li><a href="tel:+6285888418117">+6285888418117</a></li>
+                        <li>Universitas Merdeka Malang, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Blockminer. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript untuk Template -->
+    <script>
+        // Mobile Menu Functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const overlay = document.getElementById('overlay');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+        
+        if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleSidebar);
+        if(sidebarClose) sidebarClose.addEventListener('click', toggleSidebar);
+        if(overlay) overlay.addEventListener('click', toggleSidebar);
+        
+        // Hamburger animation
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        }
+
+        // Fungsi untuk scroll ke bagian tertentu
+        function scrollToSection(sectionId) {
+            const targetSection = document.querySelector(sectionId);
+            if (targetSection) {
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                
+                // Tutup sidebar setelah klik (jika terbuka)
+                if(sidebar) sidebar.classList.remove('active');
+                if(overlay) overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ==============================================
+        // NAVBAR IMPROVEMENTS - Transisi pemulihan mulus
+        // ==============================================
+        
+        // Fungsi untuk reset active state dengan animasi
+        function resetActiveState() {
+            const activeLinks = document.querySelectorAll('.desktop-nav a.active, .sidebar-nav a.active');
+            activeLinks.forEach(link => {
+                if (!link.classList.contains('reset-state')) {
+                    link.classList.add('reset-state');
+                    
+                    // Hapus class setelah animasi selesai
+                    setTimeout(() => {
+                        link.classList.remove('active', 'reset-state');
+                    }, 800);
+                }
+            });
+        }
+        
+        // Fungsi untuk set active state sementara
+        function setTemporaryActive(element) {
+            // Reset state sebelumnya
+            resetActiveState();
+            
+            // Beri jeda kecil sebelum set active baru
+            setTimeout(() => {
+                element.classList.add('active');
+                
+                // Auto reset setelah 1.2 detik
+                setTimeout(() => {
+                    if (element.classList.contains('active') && !element.matches(':hover')) {
+                        element.classList.add('reset-state');
+                        setTimeout(() => {
+                            element.classList.remove('active', 'reset-state');
+                        }, 800);
+                    }
+                }, 1200);
+            }, 50);
+        }
+        
+        // Event listener untuk semua link navigasi
+        const navLinks = document.querySelectorAll('.desktop-nav a, .sidebar-nav a');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Untuk anchor links dengan hash
+                if (this.getAttribute('href').startsWith('#') && this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    setTemporaryActive(this);
+                    
+                    // Scroll ke section
+                    const targetId = this.getAttribute('href');
+                    scrollToSection(targetId);
+                }
+                // Untuk link ke halaman lain, tetap aktif sementara
+                else if (!this.getAttribute('href').startsWith('#')) {
+                    setTemporaryActive(this);
+                }
+            });
+            
+            // Reset saat mouse leave (untuk UX lebih baik)
+            link.addEventListener('mouseleave', function() {
+                if (this.classList.contains('active') && !this.classList.contains('reset-state')) {
+                    // Tunggu sebentar sebelum reset
+                    setTimeout(() => {
+                        if (!this.matches(':hover') && !this.matches(':focus')) {
+                            resetActiveState();
+                        }
+                    }, 300);
+                }
+            });
+        });
+
+        // FAQ Functionality untuk halaman pembayaran
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const toggle = question.querySelector('.faq-toggle');
+                
+                // Toggle active class
+                answer.classList.toggle('active');
+                if(toggle) toggle.classList.toggle('active');
+                
+                // Tutup FAQ lain yang terbuka
+                faqQuestions.forEach(otherQuestion => {
+                    if (otherQuestion !== question) {
+                        const otherAnswer = otherQuestion.nextElementSibling;
+                        const otherToggle = otherQuestion.querySelector('.faq-toggle');
+                        otherAnswer.classList.remove('active');
+                        if(otherToggle) otherToggle.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Fade-in Animation on Scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = 1;
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Set initial state for fade elements
+        fadeElements.forEach(element => {
+            element.style.opacity = 0;
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        });
+
+        // Check on load and scroll
+        window.addEventListener('load', fadeInOnScroll);
+        window.addEventListener('scroll', fadeInOnScroll);
+    </script>
+</body>
+</html>
+<?php
+ob_end_flush();
+?>
